@@ -17,6 +17,7 @@ All output is logged to `/var/log/rpi_auto_update.log`, automatically trimmed to
 ## Installation
 
 ```bash
+git clone https://github.com/cruzher/rpi-autoupdate
 sudo chmod +x rpi_auto_update.sh #make it executable
 ```
 
