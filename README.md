@@ -21,7 +21,7 @@ git clone https://github.com/cruzher/rpi-autoupdate
 ```
 
 ```bash
-sudo chmod +x rpi_auto_update.sh #make it executable
+sudo chmod +x rpi_auto_update.sh
 ```
 
 ## Scheduling with cron
