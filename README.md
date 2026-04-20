@@ -17,8 +17,7 @@ All output is logged to `/var/log/rpi_auto_update.log`, automatically trimmed to
 ## Installation
 
 ```bash
-sudo cp rpi_auto_update.sh /usr/local/bin/rpi_auto_update.sh
-sudo chmod +x /usr/local/bin/rpi_auto_update.sh
+sudo chmod +x rpi_auto_update.sh #make it executable
 ```
 
 ## Scheduling with cron
@@ -27,7 +26,7 @@ sudo chmod +x /usr/local/bin/rpi_auto_update.sh
 sudo crontab -e
 ```
 
-Add one of the following lines:
+Add the script to crontab with fullpath, for example:
 
 | Schedule | Cron line |
 |---|---|
