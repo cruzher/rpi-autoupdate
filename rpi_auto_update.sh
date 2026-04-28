@@ -35,6 +35,12 @@ trim_log() {
 require_root
 trim_log
 
+# Check internet connectivity before proceeding
+if ! ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
+    log "No internet connection detected. Exiting."
+    exit 1
+fi
+
 log "========================================"
 log "  Starting Raspberry Pi OS update cycle"
 log "========================================"
