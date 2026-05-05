@@ -1,6 +1,6 @@
-# rpi-autoupdate
+# debian-autoupdate
 
-A simple bash script that keeps Raspberry Pi OS up to date automatically by running unattended APT upgrades on a cron schedule.
+A simple bash script that keeps Debian-based system up to date automatically by running unattended APT upgrades on a cron schedule.
 
 ## What it does
 
@@ -12,16 +12,16 @@ A simple bash script that keeps Raspberry Pi OS up to date automatically by runn
 6. Logs disk usage after the update
 7. Schedules a reboot (1 minute delay) if a kernel/firmware update requires it
 
-All output is logged to `/var/log/rpi_auto_update.log`, automatically trimmed to the last 500 lines.
+All output is logged to `/var/log/debian_auto_update.log`, automatically trimmed to the last 500 lines.
 
 ## Installation
 
 ```bash
-git clone https://github.com/cruzher/rpi-autoupdate
+git clone https://github.com/cruzher/debian-autoupdate
 ```
 
 ```bash
-sudo chmod +x rpi_auto_update.sh
+sudo chmod +x debian_auto_update.sh
 ```
 
 ## Scheduling with cron
@@ -34,18 +34,18 @@ Add the script to crontab with fullpath, for example:
 
 | Schedule | Cron line |
 |---|---|
-| Every Sunday at 03:00 (recommended) | `0 3 * * 0 /usr/local/bin/rpi_auto_update.sh` |
-| Every day at 03:00 | `0 3 * * * /usr/local/bin/rpi_auto_update.sh` |
-| 1st of every month at 02:30 | `30 2 1 * * /usr/local/bin/rpi_auto_update.sh` |
+| Every Sunday at 03:00 (recommended) | `0 3 * * 0 /usr/local/bin/debian_auto_update.sh` |
+| Every day at 03:00 | `0 3 * * * /usr/local/bin/debian_auto_update.sh` |
+| 1st of every month at 02:30 | `30 2 1 * * /usr/local/bin/debian_auto_update.sh` |
 
 ## Manual run
 
 ```bash
-sudo /usr/local/bin/rpi_auto_update.sh
+sudo /usr/local/bin/debian_auto_update.sh
 ```
 
 ## Log file
 
 ```bash
-tail -f /var/log/rpi_auto_update.log
+tail -f /var/log/debian_auto_update.log
 ```
