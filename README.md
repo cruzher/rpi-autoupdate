@@ -7,7 +7,7 @@ A simple bash script that keeps Debian-based system up to date automatically by 
 1. Refreshes package lists (`apt-get update`)
 2. Upgrades installed packages non-interactively, preserving existing config files
 3. Runs `full-upgrade` to handle dependency changes
-4. Removes orphaned packages (`autoremove --purge`)
+4. Removes orphaned packages (`autoremote --purge`)
 5. Clears the APT package cache
 6. Logs disk usage after the update
 7. Schedules a reboot (1 minute delay) if a kernel/firmware update requires it
@@ -23,6 +23,19 @@ git clone https://github.com/cruzher/debian-autoupdate
 ```bash
 sudo chmod +x debian_auto_update.sh
 ```
+
+### Easy Installation (Automated Cron Setup)
+
+You can use the `--install` flag to interactively set up a cron job with the correct absolute path for the script:
+
+```bash
+sudo ./debian_auto_update.sh --install
+```
+
+The script will prompt you to choose between:
+- **Daily** at 03:00
+- **Weekly** on Sunday at 03:00
+- **Monthly** on the 1st at 02:30
 
 ## Scheduling with cron
 

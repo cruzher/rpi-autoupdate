@@ -4,7 +4,7 @@
 #  Installs updates and cleans up cached packages automatically.
 #
 #  SETUP (run once as root):
-#    sudo chmod +x /usr/local/bin/debian_auto_update.sh
+#    sudo chmod +555 /usr/local/bin/debian_auto_update.sh
 #    sudo crontab -e   →  add the cron line shown at the bottom
 # =============================================================
 
@@ -31,9 +31,46 @@ trim_log() {
     fi
 }
 
+install_cron() {
+    local script_path
+    script_path=$(realpath "$0")
+
+    echo "Select a crontab schedule for: $script_path"
+    echo "1) Daily at 03:00 (0 3 * * *)"
+    echo "2) Weekly on Sunday at 03:00 (0 3 * * 0)"
+    echo "3) Monthly on the 1st at 02:30 (30 2 1 * *)"
+    echo "4) Cancel"
+    read -p "Enter choice [1-4]: " choice
+
+    local cron_schedule=""
+    case $choice in
+        1) cron_template="0 3 * * *" ;;
+        2) cron_template="0 3 * * 0" ;;
+        3) cron_template="30 2 1 * *" ;;
+        4) echo "Installation cancelled."; return 0 ;;
+        *) echo "Invalid choice."; return 1 ;;
+    esac
+
+    local cron_entry="$cron_template $script_path"
+
+    # Check if already exists
+    if crontab -l 2>/dev/null | grep -Fq "$script_path"; then
+        echo "Cron entry for $script_path already exists."
+        return 0
+    fi
+
+    (crontab -l 2>/dev/null; echo "$cron_entry") | crontab -
+    echo "Successfully installed cron job: $cron_entry"
+}
+
 # ── main ─────────────────────────────────────────────────────
 require_root
 trim_log
+
+if [[ "$1" == "--install" ]]; then
+    install_cron
+    exit 0
+fi
 
 # Check internet connectivity before proceeding
 if ! ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
@@ -41,9 +78,9 @@ if ! ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
     exit 1
 fi
 
-log "========================================"
+log "============================================================"
 log "  Starting Debian-based system update cycle"
-log "========================================"
+log "============================================================"
 
 # 1. Refresh package lists
 log "→ Updating package lists…"
@@ -75,7 +112,7 @@ apt-get autoremove -y --purge >> "$LOG" 2>&1
 log "  Autoremove done."
 
 # 5. Clear the APT package cache (downloaded .deb files)
-log "→ Cleaning APT package cache…"
+log "→ Cleaning APT package *package* cache…"
 apt-get clean >> "$LOG" 2>&1          # removes /var/cache/apt/archives/*.deb
 apt-get autoclean >> "$LOG" 2>&1      # removes .deb files for packages no longer in repos
 log "  Cache cleaned."
@@ -94,7 +131,7 @@ fi
 log "  Update cycle finished."
 log ""
 
-# =============================================================
+# ====================================================================
 #  CRON SETUP  (add ONE of these to: sudo crontab -e)
 #
 #  Every Sunday at 03:00 (recommended for most Pi projects):
@@ -105,4 +142,4 @@ log ""
 #
 #  Every 1st of the month at 02:30:
 #    30 2 1 * * /usr/local/bin/debian_auto_update.sh
-# =============================================================
+# ====================================================================
